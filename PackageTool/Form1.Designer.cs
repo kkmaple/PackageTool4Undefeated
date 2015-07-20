@@ -1,0 +1,175 @@
+﻿namespace PackageTool
+{
+    partial class Form1
+    {
+        /// <summary>
+        /// 必需的设计器变量。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// 清理所有正在使用的资源。
+        /// </summary>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows 窗体设计器生成的代码
+
+        /// <summary>
+        /// 设计器支持所需的方法 - 不要
+        /// 使用代码编辑器修改此方法的内容。
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.OriginalBaseVerLabel = new System.Windows.Forms.Label();
+            this.BaseVerTxt = new System.Windows.Forms.TextBox();
+            this.CurVerTxt = new System.Windows.Forms.TextBox();
+            this.CurVerLabel = new System.Windows.Forms.Label();
+            this.ResListLabel = new System.Windows.Forms.Label();
+            this.ResList = new System.Windows.Forms.ListBox();
+            this.BasePathLabel = new System.Windows.Forms.Label();
+            this.BasePathFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.BasePathTxt = new System.Windows.Forms.Label();
+            this.BasePathBrowserBtn = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(551, 0);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(8, 8);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
+            // OriginalBaseVerLabel
+            // 
+            this.OriginalBaseVerLabel.AutoSize = true;
+            this.OriginalBaseVerLabel.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.OriginalBaseVerLabel.Location = new System.Drawing.Point(74, 53);
+            this.OriginalBaseVerLabel.Name = "OriginalBaseVerLabel";
+            this.OriginalBaseVerLabel.Size = new System.Drawing.Size(83, 12);
+            this.OriginalBaseVerLabel.TabIndex = 1;
+            this.OriginalBaseVerLabel.Text = "Base Version:";
+            this.OriginalBaseVerLabel.Visible = false;
+            // 
+            // BaseVerTxt
+            // 
+            this.BaseVerTxt.Location = new System.Drawing.Point(233, 51);
+            this.BaseVerTxt.Name = "BaseVerTxt";
+            this.BaseVerTxt.Size = new System.Drawing.Size(144, 21);
+            this.BaseVerTxt.TabIndex = 2;
+            this.BaseVerTxt.Visible = false;
+            // 
+            // CurVerTxt
+            // 
+            this.CurVerTxt.Location = new System.Drawing.Point(233, 96);
+            this.CurVerTxt.Name = "CurVerTxt";
+            this.CurVerTxt.Size = new System.Drawing.Size(144, 21);
+            this.CurVerTxt.TabIndex = 4;
+            // 
+            // CurVerLabel
+            // 
+            this.CurVerLabel.AutoSize = true;
+            this.CurVerLabel.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.CurVerLabel.Location = new System.Drawing.Point(62, 98);
+            this.CurVerLabel.Name = "CurVerLabel";
+            this.CurVerLabel.Size = new System.Drawing.Size(101, 12);
+            this.CurVerLabel.TabIndex = 3;
+            this.CurVerLabel.Text = "Current Version:";
+            // 
+            // ResListLabel
+            // 
+            this.ResListLabel.AutoSize = true;
+            this.ResListLabel.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ResListLabel.Location = new System.Drawing.Point(70, 150);
+            this.ResListLabel.Name = "ResListLabel";
+            this.ResListLabel.Size = new System.Drawing.Size(89, 12);
+            this.ResListLabel.TabIndex = 5;
+            this.ResListLabel.Text = "Resource list:";
+            // 
+            // ResList
+            // 
+            this.ResList.FormattingEnabled = true;
+            this.ResList.ItemHeight = 12;
+            this.ResList.Location = new System.Drawing.Point(233, 150);
+            this.ResList.Name = "ResList";
+            this.ResList.Size = new System.Drawing.Size(144, 148);
+            this.ResList.TabIndex = 6;
+            // 
+            // BasePathLabel
+            // 
+            this.BasePathLabel.AutoSize = true;
+            this.BasePathLabel.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.BasePathLabel.Location = new System.Drawing.Point(419, 50);
+            this.BasePathLabel.Name = "BasePathLabel";
+            this.BasePathLabel.Size = new System.Drawing.Size(65, 12);
+            this.BasePathLabel.TabIndex = 7;
+            this.BasePathLabel.Text = "Base Path:";
+            // 
+            // BasePathTxt
+            // 
+            this.BasePathTxt.AutoSize = true;
+            this.BasePathTxt.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.BasePathTxt.Location = new System.Drawing.Point(513, 50);
+            this.BasePathTxt.Name = "BasePathTxt";
+            this.BasePathTxt.Size = new System.Drawing.Size(89, 12);
+            this.BasePathTxt.TabIndex = 8;
+            this.BasePathTxt.Text = "这里是路径地址";
+            // 
+            // BasePathBrowserBtn
+            // 
+            this.BasePathBrowserBtn.Location = new System.Drawing.Point(891, 45);
+            this.BasePathBrowserBtn.Name = "BasePathBrowserBtn";
+            this.BasePathBrowserBtn.Size = new System.Drawing.Size(75, 23);
+            this.BasePathBrowserBtn.TabIndex = 9;
+            this.BasePathBrowserBtn.Text = "浏览...";
+            this.BasePathBrowserBtn.UseVisualStyleBackColor = true;
+            this.BasePathBrowserBtn.Click += new System.EventHandler(this.BasePathBrowserBtn_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1123, 391);
+            this.Controls.Add(this.BasePathBrowserBtn);
+            this.Controls.Add(this.BasePathTxt);
+            this.Controls.Add(this.BasePathLabel);
+            this.Controls.Add(this.ResList);
+            this.Controls.Add(this.ResListLabel);
+            this.Controls.Add(this.CurVerTxt);
+            this.Controls.Add(this.CurVerLabel);
+            this.Controls.Add(this.BaseVerTxt);
+            this.Controls.Add(this.OriginalBaseVerLabel);
+            this.Controls.Add(this.richTextBox1);
+            this.Name = "Form1";
+            this.Text = "PackageTool";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label OriginalBaseVerLabel;
+        private System.Windows.Forms.TextBox BaseVerTxt;
+        private System.Windows.Forms.TextBox CurVerTxt;
+        private System.Windows.Forms.Label CurVerLabel;
+        private System.Windows.Forms.Label ResListLabel;
+        private System.Windows.Forms.ListBox ResList;
+        private System.Windows.Forms.Label BasePathLabel;
+        private System.Windows.Forms.FolderBrowserDialog BasePathFolderBrowser;
+        private System.Windows.Forms.Label BasePathTxt;
+        private System.Windows.Forms.Button BasePathBrowserBtn;
+    }
+}
+
