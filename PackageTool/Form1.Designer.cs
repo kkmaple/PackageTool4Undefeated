@@ -39,6 +39,8 @@
             this.BasePathFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.BasePathTxt = new System.Windows.Forms.Label();
             this.BasePathBrowserBtn = new System.Windows.Forms.Button();
+            this.NewVerBtn = new System.Windows.Forms.Button();
+            this.GoGoGo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -58,7 +60,6 @@
             this.OriginalBaseVerLabel.Size = new System.Drawing.Size(83, 12);
             this.OriginalBaseVerLabel.TabIndex = 1;
             this.OriginalBaseVerLabel.Text = "Base Version:";
-            this.OriginalBaseVerLabel.Visible = false;
             // 
             // BaseVerTxt
             // 
@@ -66,7 +67,6 @@
             this.BaseVerTxt.Name = "BaseVerTxt";
             this.BaseVerTxt.Size = new System.Drawing.Size(144, 21);
             this.BaseVerTxt.TabIndex = 2;
-            this.BaseVerTxt.Visible = false;
             // 
             // CurVerTxt
             // 
@@ -134,11 +134,33 @@
             this.BasePathBrowserBtn.UseVisualStyleBackColor = true;
             this.BasePathBrowserBtn.Click += new System.EventHandler(this.BasePathBrowserBtn_Click);
             // 
+            // NewVerBtn
+            // 
+            this.NewVerBtn.Location = new System.Drawing.Point(456, 150);
+            this.NewVerBtn.Name = "NewVerBtn";
+            this.NewVerBtn.Size = new System.Drawing.Size(75, 23);
+            this.NewVerBtn.TabIndex = 10;
+            this.NewVerBtn.Text = "添加新版本";
+            this.NewVerBtn.UseVisualStyleBackColor = true;
+            this.NewVerBtn.Click += new System.EventHandler(this.NewVerBtn_Click);
+            // 
+            // GoGoGo
+            // 
+            this.GoGoGo.Location = new System.Drawing.Point(456, 198);
+            this.GoGoGo.Name = "GoGoGo";
+            this.GoGoGo.Size = new System.Drawing.Size(75, 23);
+            this.GoGoGo.TabIndex = 11;
+            this.GoGoGo.Text = "go!";
+            this.GoGoGo.UseVisualStyleBackColor = true;
+            this.GoGoGo.Click += new System.EventHandler(this.GoGoGo_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1123, 391);
+            this.Controls.Add(this.GoGoGo);
+            this.Controls.Add(this.NewVerBtn);
             this.Controls.Add(this.BasePathBrowserBtn);
             this.Controls.Add(this.BasePathTxt);
             this.Controls.Add(this.BasePathLabel);
@@ -170,6 +192,16 @@
         private System.Windows.Forms.FolderBrowserDialog BasePathFolderBrowser;
         private System.Windows.Forms.Label BasePathTxt;
         private System.Windows.Forms.Button BasePathBrowserBtn;
+        //md5文件目录
+        private string resmd5txtFolder;
+        private System.Windows.Forms.Button NewVerBtn;
+        private System.Windows.Forms.Button GoGoGo;
+        //程序当前路劲
+        private string curPath;
+        //当前打包版本
+        private string curVer;
+        //已打版本个数
+        private int verCount;
     }
 }
 

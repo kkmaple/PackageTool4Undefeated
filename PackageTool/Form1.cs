@@ -26,12 +26,12 @@ namespace PackageTool
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            InitUIData();
+            RefreshUIData();
         }
 
         private void BasePathBrowserBtn_Click(object sender, EventArgs e)
         {
-            Command cmd = new Command();
+            //Command cmd = new Command();
             //cmd.RunCmd(@"file_generator.py");
             //cmd.RunCmd(@"md5cmp.py");
             //cmd.RunCmd(@"tool.py");
@@ -40,30 +40,22 @@ namespace PackageTool
             //        p(@"dir");
             //        p("pause");
             //    });
-            cmd.RunCmd(@"dir");
-            DiffTool.Diff("1.6.05.0.txt", "1.6.06.0.txt", @"F:\1.6.0.0_ios\package-ios\restmd5xt");
+            //cmd.RunCmd(@"dir");
+            //DiffTool.Diff("1.6.05.0.txt", "1.6.06.0.txt", @"F:\1.6.0.0_ios\package-ios\restmd5xt");
+            //VersionUpgrade();
         }
 
-        private void InitUIData()
+        private void NewVerBtn_Click(object sender, EventArgs e)
         {
-            StringBuilder temp = new StringBuilder(255);
-#if DEBUG
-            GetPrivateProfileString("init_value", "basepath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
-            GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf.ini");
-#endif
-            BasePathTxt.Text = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("init_value", "current_base", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
-            GetPrivateProfileString("init_value", "current_base", "", temp, 255, "./pkgconf.ini");
-#endif
-            CurVerTxt.Text = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("init_value", "basepath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
-            GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf.ini");
-#endif
+            VersionUpgrade();
+        }
+
+        private void GoGoGo_Click(object sender, EventArgs e)
+        {
+            Command cmd = new Command();
+            cmd.RunCmd(@"file_generator.py");
+            cmd.RunCmd(@"md5cmp.py");
+            cmd.RunCmd(@"tool.py");
         }
     }
 }
