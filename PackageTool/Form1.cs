@@ -52,10 +52,13 @@ namespace PackageTool
 
         private void GoGoGo_Click(object sender, EventArgs e)
         {
-            Command cmd = new Command();
-            cmd.RunCmd(@"file_generator.py");
-            cmd.RunCmd(@"md5cmp.py");
-            cmd.RunCmd(@"tool.py");
+            //Svn 更新Media目录
+            SVN.Update(resmd5txtFolder + "/../Media");
+            //Command cmd = new Command();
+            //cmd.RunCmd(@"file_generator.py");
+            //cmd.RunCmd(@"md5cmp.py");
+            //cmd.RunCmd(@"tool.py");
+            //cmd.RunCmd(@"解压拷贝.bat");
         }
     }
 }

@@ -25,7 +25,7 @@ namespace PackageTool
         {
             proc.StartInfo.CreateNoWindow = false;
             proc.StartInfo.FileName = "cmd.exe";
-            proc.StartInfo.Arguments = " /k " + cmd;
+            proc.StartInfo.Arguments = " /c " + cmd;
             proc.StartInfo.UseShellExecute = false;
             proc.Start();
             proc.WaitForExit();

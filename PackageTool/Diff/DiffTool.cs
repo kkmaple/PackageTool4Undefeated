@@ -12,9 +12,7 @@ namespace PackageTool
         {
             Command.ExecBatCommand(p =>
             {
-                p(folder.Substring(0,2));
-                p(@"cd " + folder);
-                p("TortoiseMerge " + file1 + " " + file2);
+                p("TortoiseMerge " + folder + "/" + file1 + " " + folder + "/" + file2);
             });
         }
     }

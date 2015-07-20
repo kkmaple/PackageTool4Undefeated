@@ -12,9 +12,8 @@ namespace PackageTool
         {
             Command.ExecBatCommand(p =>
                 {
-                    p(@"cd " + folder);
-                    p("svn update");
-                    //p("pause");
+                    p("svn update " + folder);
+                    p("exit");
                 });
         }
     };
