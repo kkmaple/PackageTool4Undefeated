@@ -108,11 +108,13 @@ namespace PackageTool
         {
             //获取当前工作目录
             curPath = System.IO.Directory.GetCurrentDirectory();
+            //设置窗口名称
+            this.Text = curPath;
             //拷贝pkgconf.ini文件
 #if DEBUG
-            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf-tunk.ini", "F:/1.6.0.0_ios/package-ios/pkgconf.ini", true);
+            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf-trunk.ini", "F:/1.6.0.0_ios/package-ios/pkgconf.ini", true);
 #else
-            File.Copy("./pkgconf-tunk.ini", "./pkgconf.ini", true);
+            File.Copy("./pkgconf-trunk.ini", "./pkgconf.ini", true);
 #endif
         }
 
@@ -131,9 +133,9 @@ namespace PackageTool
             cmd.RunCmd(@"解压拷贝.bat");
             //拷贝最新的ini文件
 #if DEBUG
-            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/pkgconf-tunk.ini", true);
+            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/pkgconf-trunk.ini", true);
 #else
-            File.Copy("./pkgconf.ini", "./pkgconf-tunk.ini", true);
+            File.Copy("./pkgconf.ini", "./pkgconf-trunk.ini", true);
 #endif
             //修改xml文件
             ModifyChangeXml();

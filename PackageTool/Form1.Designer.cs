@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.OriginalBaseVerLabel = new System.Windows.Forms.Label();
             this.BaseVerTxt = new System.Windows.Forms.TextBox();
             this.CurVerTxt = new System.Windows.Forms.TextBox();
@@ -42,14 +41,6 @@
             this.NewVerBtn = new System.Windows.Forms.Button();
             this.GoGoGo = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(551, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(8, 8);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
             // 
             // OriginalBaseVerLabel
             // 
@@ -65,6 +56,7 @@
             // 
             this.BaseVerTxt.Location = new System.Drawing.Point(233, 51);
             this.BaseVerTxt.Name = "BaseVerTxt";
+            this.BaseVerTxt.ReadOnly = true;
             this.BaseVerTxt.Size = new System.Drawing.Size(144, 21);
             this.BaseVerTxt.TabIndex = 2;
             // 
@@ -72,6 +64,7 @@
             // 
             this.CurVerTxt.Location = new System.Drawing.Point(233, 96);
             this.CurVerTxt.Name = "CurVerTxt";
+            this.CurVerTxt.ReadOnly = true;
             this.CurVerTxt.Size = new System.Drawing.Size(144, 21);
             this.CurVerTxt.TabIndex = 4;
             // 
@@ -173,7 +166,6 @@
             this.Controls.Add(this.CurVerLabel);
             this.Controls.Add(this.BaseVerTxt);
             this.Controls.Add(this.OriginalBaseVerLabel);
-            this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PackageTool";
@@ -185,7 +177,6 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label OriginalBaseVerLabel;
         private System.Windows.Forms.TextBox BaseVerTxt;
         private System.Windows.Forms.TextBox CurVerTxt;
