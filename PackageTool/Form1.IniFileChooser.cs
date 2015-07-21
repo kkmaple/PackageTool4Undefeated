@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,18 @@ namespace PackageTool
             GetPrivateProfileString("gener_value", "md5txtpath", "", temp, 255, "./pkgconf.ini");
 #endif
             resmd5txtFolder = temp.ToString();
+#if DEBUG
+            GetPrivateProfileString("changexml_path", "changexmlpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            GetPrivateProfileString("changexml_path", "changexmlpath", "", temp, 255, "./pkgconf.ini");
+#endif
+            changePath = temp.ToString();
+#if DEBUG
+            GetPrivateProfileString("online_folder", "onlinefolder", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            GetPrivateProfileString("online_folder", "onlinefolder", "", temp, 255, "./pkgconf.ini");
+#endif
+            onlineFolder = temp.ToString();
             //添加resource list
             ResList.Items.Clear();
             for (int i = 1; ; ++i)
@@ -69,11 +82,95 @@ namespace PackageTool
             newVer += Int32.Parse(nowVer.Split('.')[2]) + 1;
             newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + newVer + "." + nowVer.Split('.')[3];
             //设置新版本
+#if DEBUG
             WritePrivateProfileString("init_value", "current_base", newVer, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            WritePrivateProfileString("init_value", "current_base", newVer, "./pkgconf.ini");
+#endif
             //添加旧版本
+#if DEBUG
             WritePrivateProfileString("resource_list", "base" + (verCount+1), newVer, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            WritePrivateProfileString("resource_list", "base" + (verCount+1), newVer, "./pkgconf.ini");
+#endif
             //刷新数据,源界面显示
             RefreshUIData();
+        }
+
+        private void InitData()
+        {
+            //获取当前工作目录
+            curPath = System.IO.Directory.GetCurrentDirectory();
+            //拷贝pkgconf.ini文件
+#if DEBUG
+            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf-tunk.ini", "F:/1.6.0.0_ios/package-ios/pkgconf.ini", true);
+#else
+            File.Copy("./pkgconf-tunk.ini", "./pkgconf.ini", true);
+#endif
+        }
+
+        private void DoPack()
+        {
+            //Svn 更新Media目录
+            SVN.Update(resmd5txtFolder + "/../Media");
+            Command cmd = new Command();
+            //删除之前的zip和zs5文件
+            //cmd.RunCmd(@"del /f /q *.zip *.zs5");
+            //检查md5文件
+            //CheckMd5File();
+            //cmd.RunCmd(@"file_generator.py");
+            //cmd.RunCmd(@"md5cmp.py");
+            //cmd.RunCmd(@"tool.py");
+            //cmd.RunCmd(@"解压拷贝.bat");
+            //拷贝最新的ini文件
+#if DEBUG
+            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/pkgconf-tunk.ini", true);
+#else
+            File.Copy("./pkgconf.ini", "./pkgconf-tunk.ini", true);
+#endif
+            //修改xml文件
+            ModifyChangeXml();
+            //拷贝最终的zip包
+            //CopyFinalZipPack();
+            MessageBox.Show(curPath.Split('\\')[curPath.Split('\\').Length - 1] + " 更新包已打出！");
+        }
+
+        private void CheckMd5File()
+        {
+            if (File.Exists(resmd5txtFolder + "/" + curVer + ".txt"))
+            {
+                for (int i = 1; ; ++i)
+                {
+                    if (File.Exists(resmd5txtFolder + "/" + curVer + "-" + i + ".txt"))
+                        continue;
+                    File.Move(resmd5txtFolder + "/" + curVer + ".txt", resmd5txtFolder + "/" + curVer + "-" + i + ".txt");
+                    break;
+                }
+            }
+        }
+
+        private void ModifyChangeXml()
+        {
+
+        }
+
+        private void CopyFinalZipPack()
+        {
+            DateTime now = DateTime.Now;
+            if (!Directory.Exists(onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer))
+            {
+                //Directory.Delete(onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer, true);
+                Directory.CreateDirectory(onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer);
+            }
+            Command.ExecBatCommand(p =>
+            {
+#if DEBUG
+                p("xcopy " + @"F:\1.6.0.0_ios\package-ios" + @"\*.zip " + onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer + " /R /D /Y");
+#else
+                p("xcopy "+ curPath + "/*.zip " + onlineFolder + "/" + now.Year + now.Month + now.Day + "-" + curVer + " /R /D /Y");
+#endif
+                p("exit");
+            });
         }
     }
 }

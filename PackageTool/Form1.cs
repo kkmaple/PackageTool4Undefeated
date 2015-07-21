@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -26,6 +27,7 @@ namespace PackageTool
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            InitData();
             RefreshUIData();
         }
 
@@ -52,13 +54,7 @@ namespace PackageTool
 
         private void GoGoGo_Click(object sender, EventArgs e)
         {
-            //Svn 更新Media目录
-            SVN.Update(resmd5txtFolder + "/../Media");
-            //Command cmd = new Command();
-            //cmd.RunCmd(@"file_generator.py");
-            //cmd.RunCmd(@"md5cmp.py");
-            //cmd.RunCmd(@"tool.py");
-            //cmd.RunCmd(@"解压拷贝.bat");
+            DoPack();
         }
     }
 }

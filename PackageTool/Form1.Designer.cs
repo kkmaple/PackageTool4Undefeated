@@ -113,6 +113,7 @@
             this.BasePathLabel.Size = new System.Drawing.Size(65, 12);
             this.BasePathLabel.TabIndex = 7;
             this.BasePathLabel.Text = "Base Path:";
+            this.BasePathLabel.Visible = false;
             // 
             // BasePathTxt
             // 
@@ -123,6 +124,7 @@
             this.BasePathTxt.Size = new System.Drawing.Size(89, 12);
             this.BasePathTxt.TabIndex = 8;
             this.BasePathTxt.Text = "这里是路径地址";
+            this.BasePathTxt.Visible = false;
             // 
             // BasePathBrowserBtn
             // 
@@ -132,6 +134,7 @@
             this.BasePathBrowserBtn.TabIndex = 9;
             this.BasePathBrowserBtn.Text = "浏览...";
             this.BasePathBrowserBtn.UseVisualStyleBackColor = true;
+            this.BasePathBrowserBtn.Visible = false;
             this.BasePathBrowserBtn.Click += new System.EventHandler(this.BasePathBrowserBtn_Click);
             // 
             // NewVerBtn
@@ -158,7 +161,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1123, 391);
+            this.ClientSize = new System.Drawing.Size(582, 391);
             this.Controls.Add(this.GoGoGo);
             this.Controls.Add(this.NewVerBtn);
             this.Controls.Add(this.BasePathBrowserBtn);
@@ -202,6 +205,10 @@
         private string curVer;
         //已打版本个数
         private int verCount;
+        //change.xml 路径
+        private string changePath;
+        //online folder
+        private string onlineFolder;
     }
 }
 

@@ -13,6 +13,7 @@ namespace PackageTool
             Command.ExecBatCommand(p =>
             {
                 p("TortoiseMerge " + folder + "/" + file1 + " " + folder + "/" + file2);
+                p("exit");
             });
         }
     }
