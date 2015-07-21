@@ -236,6 +236,7 @@
         //ini文件名
         private string iniFileName;
         private System.Windows.Forms.Button testSynBtn;
+        private int verLen;
     }
 }
 

@@ -1,6 +1,4 @@
-﻿#define TEST
-
-using Microsoft.VisualBasic.FileIO;
+﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,6 +36,12 @@ namespace PackageTool
             GetPrivateProfileString("init_value", "xmlbasever", "", temp, 255, "./pkgconf.ini");
 #endif
             BaseVerTxt.Text = temp.ToString();
+#if DEBUG
+            GetPrivateProfileString("init_value", "version_len", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            GetPrivateProfileString("init_value", "version_len", "", temp, 255, "./pkgconf.ini");
+#endif
+            verLen = Int32.Parse(temp.ToString());
 #if DEBUG
             GetPrivateProfileString("gener_value", "md5txtpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
 #else
@@ -96,11 +100,11 @@ namespace PackageTool
             //计算新版本
             string nowVer = CurVerTxt.Text;
 #if TEST
-            int verLen = nowVer.Split('.')[2].Length;
+            //int verLen = nowVer.Split('.')[2].Length;
             string newVer = "" + (Int32.Parse(nowVer.Split('.')[3]) + 1);
             newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + nowVer.Split('.')[2] + "." + newVer;
 #else
-            int verLen = nowVer.Split('.')[2].Length;
+            //int verLen = nowVer.Split('.')[2].Length;
             string newVer = "";
             for (int i = 1; i < verLen && Int32.Parse(nowVer.Split('.')[2]) < 9; ++i)
             {
@@ -171,7 +175,6 @@ namespace PackageTool
             }
 
 #endif
-            return;
             cmd.RunCmd(@"md5cmp.py");
             cmd.RunCmd(@"tool.py");
             cmd.RunCmd(@"解压拷贝.bat");
@@ -275,7 +278,13 @@ namespace PackageTool
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #else
             string lastVer = "";
-            lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + curVer.Split('.')[2] + ".0";
+            if (verLen == 1)
+                lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
+            else
+            {
+                if(Int32.Parse(curVer.Split('.')[2]) < 11)
+                    lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + ".0" + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
+            }
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #endif
         }
