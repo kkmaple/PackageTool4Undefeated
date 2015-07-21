@@ -40,6 +40,8 @@
             this.BasePathBrowserBtn = new System.Windows.Forms.Button();
             this.NewVerBtn = new System.Windows.Forms.Button();
             this.GoGoGo = new System.Windows.Forms.Button();
+            this.compareBtn = new System.Windows.Forms.Button();
+            this.testSynBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OriginalBaseVerLabel
@@ -150,11 +152,34 @@
             this.GoGoGo.UseVisualStyleBackColor = true;
             this.GoGoGo.Click += new System.EventHandler(this.GoGoGo_Click);
             // 
+            // compareBtn
+            // 
+            this.compareBtn.Location = new System.Drawing.Point(456, 246);
+            this.compareBtn.Name = "compareBtn";
+            this.compareBtn.Size = new System.Drawing.Size(75, 23);
+            this.compareBtn.TabIndex = 12;
+            this.compareBtn.Text = "对比";
+            this.compareBtn.UseVisualStyleBackColor = true;
+            this.compareBtn.Click += new System.EventHandler(this.compareBtn_Click);
+            // 
+            // testSynBtn
+            // 
+            this.testSynBtn.Location = new System.Drawing.Point(456, 291);
+            this.testSynBtn.Name = "testSynBtn";
+            this.testSynBtn.Size = new System.Drawing.Size(75, 23);
+            this.testSynBtn.TabIndex = 13;
+            this.testSynBtn.Text = "同步版本";
+            this.testSynBtn.UseVisualStyleBackColor = true;
+            this.testSynBtn.Visible = false;
+            this.testSynBtn.Click += new System.EventHandler(this.testSynBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 391);
+            this.Controls.Add(this.testSynBtn);
+            this.Controls.Add(this.compareBtn);
             this.Controls.Add(this.GoGoGo);
             this.Controls.Add(this.NewVerBtn);
             this.Controls.Add(this.BasePathBrowserBtn);
@@ -207,6 +232,10 @@
         private string locPath;
         //res media path
         private string resPath;
+        private System.Windows.Forms.Button compareBtn;
+        //ini文件名
+        private string iniFileName;
+        private System.Windows.Forms.Button testSynBtn;
     }
 }
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿#define TEST
+
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -93,6 +95,11 @@ namespace PackageTool
         {
             //计算新版本
             string nowVer = CurVerTxt.Text;
+#if TEST
+            int verLen = nowVer.Split('.')[2].Length;
+            string newVer = "" + (Int32.Parse(nowVer.Split('.')[3]) + 1);
+            newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + nowVer.Split('.')[2] + "." + newVer;
+#else
             int verLen = nowVer.Split('.')[2].Length;
             string newVer = "";
             for (int i = 1; i < verLen && Int32.Parse(nowVer.Split('.')[2]) < 9; ++i)
@@ -101,6 +108,7 @@ namespace PackageTool
             }
             newVer += Int32.Parse(nowVer.Split('.')[2]) + 1;
             newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + newVer + "." + nowVer.Split('.')[3];
+#endif
             //设置新版本
 #if DEBUG
             WritePrivateProfileString("init_value", "current_base", newVer, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
@@ -123,11 +131,18 @@ namespace PackageTool
             curPath = System.IO.Directory.GetCurrentDirectory();
             //设置窗口名称
             this.Text = curPath;
+            //设置ini文件名
+#if TEST
+            iniFileName = "pkgconf-test.ini";
+            testSynBtn.Visible = true;
+#else
+            iniFileName = "pkgconf-trunk.ini";
+#endif
             //拷贝pkgconf.ini文件
 #if DEBUG
-            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf-trunk.ini", "F:/1.6.0.0_ios/package-ios/pkgconf.ini", true);
+            File.Copy("F:/1.6.0.0_ios/package-ios/" + iniFileName, "F:/1.6.0.0_ios/package-ios/pkgconf.ini", true);
 #else
-            File.Copy("./pkgconf-trunk.ini", "./pkgconf.ini", true);
+            File.Copy(iniFileName, "./pkgconf.ini", true);
 #endif
         }
 
@@ -142,15 +157,29 @@ namespace PackageTool
             cmd.RunCmd(@"del /f /q *.zip *.zs5");
             //检查md5文件
             CheckMd5File();
-            cmd.RunCmd(@"file_generator.py");
+            //cmd.RunCmd(@"file_generator.py");
+#if TEST
+            DiffTowFile();
+            var result = MessageBox.Show("继续么？", "提示",
+                                        MessageBoxButtons.YesNo,
+                                        MessageBoxIcon.Warning);
+
+            // If the no button was pressed ...
+            if (result == DialogResult.No)
+            {
+                return;
+            }
+
+#endif
+            return;
             cmd.RunCmd(@"md5cmp.py");
             cmd.RunCmd(@"tool.py");
             cmd.RunCmd(@"解压拷贝.bat");
             //拷贝最新的ini文件
 #if DEBUG
-            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/pkgconf-trunk.ini", true);
+            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/" + iniFileName, true);
 #else
-            File.Copy("./pkgconf.ini", "./pkgconf-trunk.ini", true);
+            File.Copy("./pkgconf.ini", iniFileName, true);
 #endif
             //修改xml文件
             ModifyChangeXml();
@@ -202,7 +231,8 @@ namespace PackageTool
 
         private void UpdateLocalizationFile()
         {
-            SVN.Update(locPath);
+            if ("" != locPath)
+                SVN.Update(locPath);
         }
 
         private void CopyLocallizationFile()
@@ -218,6 +248,36 @@ namespace PackageTool
                     p("exit");
                 });
             }
+        }
+
+        private void SynVersion()
+        {
+            StringBuilder temp = new StringBuilder(255);
+            GetPrivateProfileString("init_value", "current_base", "", temp, 255, "./pkgconf-trunk.ini");
+            WritePrivateProfileString("init_value", "current_base", temp.ToString(), "./pkgconf-test.ini");
+            WritePrivateProfileString("resource_list", null, null, "./pkgconf-test.ini");
+            for (int i = 1; ; ++i)
+            {
+                GetPrivateProfileString("resource_list", "base" + i, "", temp, 255, "./pkgconf-trunk.ini");
+                if (temp.ToString() == "")
+                    break;
+                WritePrivateProfileString("resource_list", "base" + i, temp.ToString(), "./pkgconf-test.ini");
+            }
+            InitData();
+            RefreshUIData();
+        }
+
+        private void DiffTowFile()
+        {
+#if TEST
+            string lastVer = "";
+            lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + curVer.Split('.')[2] + ".0";
+            DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
+#else
+            string lastVer = "";
+            lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + curVer.Split('.')[2] + ".0";
+            DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
+#endif
         }
     }
 }
