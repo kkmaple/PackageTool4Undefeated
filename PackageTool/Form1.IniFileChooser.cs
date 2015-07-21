@@ -60,6 +60,18 @@ namespace PackageTool
             GetPrivateProfileString("online_folder", "onlinefolder", "", temp, 255, "./pkgconf.ini");
 #endif
             onlineFolder = temp.ToString();
+#if DEBUG
+            GetPrivateProfileString("localization", "locpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            GetPrivateProfileString("localization", "locpath", "", temp, 255, "./pkgconf.ini");
+#endif
+            locPath = temp.ToString();
+            #if DEBUG
+            GetPrivateProfileString("localization", "respath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            GetPrivateProfileString("localization", "respath", "", temp, 255, "./pkgconf.ini");
+#endif
+            resPath = temp.ToString();
             //添加resource list
             ResList.Items.Clear();
             for (int i = 1; ; ++i)
@@ -97,9 +109,9 @@ namespace PackageTool
 #endif
             //添加旧版本
 #if DEBUG
-            WritePrivateProfileString("resource_list", "base" + (verCount+1), newVer, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+            WritePrivateProfileString("resource_list", "base" + (verCount+1), nowVer, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
 #else
-            WritePrivateProfileString("resource_list", "base" + (verCount+1), newVer, "./pkgconf.ini");
+            WritePrivateProfileString("resource_list", "base" + (verCount+1), nowVer, "./pkgconf.ini");
 #endif
             //刷新数据,源界面显示
             RefreshUIData();
@@ -122,7 +134,9 @@ namespace PackageTool
         private void DoPack()
         {
             //Svn 更新Media目录
-            SVN.Update(resmd5txtFolder + "/../Media");
+            SVN.Update(resPath);
+            UpdateLocalizationFile();
+            CopyLocallizationFile();
             Command cmd = new Command();
             //删除之前的zip和zs5文件
             cmd.RunCmd(@"del /f /q *.zip *.zs5");
@@ -188,12 +202,22 @@ namespace PackageTool
 
         private void UpdateLocalizationFile()
         {
-
+            SVN.Update(locPath);
         }
 
         private void CopyLocallizationFile()
         {
-            FileSystem.CopyDirectory("","");
+            if ("" != locPath)
+            {
+                FileSystem.CopyDirectory(locPath, resPath, true);
+                Command.ExecBatCommand(p =>
+                {
+                    p(resPath.Substring(0,2));
+                    p("cd " + resPath);
+                    p(@"del /f /q *.xlsx");
+                    p("exit");
+                });
+            }
         }
     }
 }

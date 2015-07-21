@@ -203,6 +203,10 @@
         private string onlineFolder;
         //change os
         private string changeOs;
+        //localization media path
+        private string locPath;
+        //res media path
+        private string resPath;
     }
 }
 
