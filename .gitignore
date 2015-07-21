@@ -1,3 +1,5 @@
 *.suo
 /PackageTool/bin
 /PackageTool/obj
+/Command/bin
+/Command/obj

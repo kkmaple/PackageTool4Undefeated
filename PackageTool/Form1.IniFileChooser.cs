@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace PackageTool
 {
@@ -46,6 +47,12 @@ namespace PackageTool
             GetPrivateProfileString("changexml_path", "changexmlpath", "", temp, 255, "./pkgconf.ini");
 #endif
             changePath = temp.ToString();
+#if DEBUG
+            GetPrivateProfileString("changexml_path", "os", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            GetPrivateProfileString("changexml_path", "os", "", temp, 255, "./pkgconf.ini");
+#endif
+            changeOs = temp.ToString();
 #if DEBUG
             GetPrivateProfileString("online_folder", "onlinefolder", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
 #else
@@ -115,13 +122,13 @@ namespace PackageTool
             SVN.Update(resmd5txtFolder + "/../Media");
             Command cmd = new Command();
             //删除之前的zip和zs5文件
-            //cmd.RunCmd(@"del /f /q *.zip *.zs5");
+            cmd.RunCmd(@"del /f /q *.zip *.zs5");
             //检查md5文件
-            //CheckMd5File();
-            //cmd.RunCmd(@"file_generator.py");
-            //cmd.RunCmd(@"md5cmp.py");
-            //cmd.RunCmd(@"tool.py");
-            //cmd.RunCmd(@"解压拷贝.bat");
+            CheckMd5File();
+            cmd.RunCmd(@"file_generator.py");
+            cmd.RunCmd(@"md5cmp.py");
+            cmd.RunCmd(@"tool.py");
+            cmd.RunCmd(@"解压拷贝.bat");
             //拷贝最新的ini文件
 #if DEBUG
             File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/pkgconf-tunk.ini", true);
@@ -151,7 +158,10 @@ namespace PackageTool
 
         private void ModifyChangeXml()
         {
-
+            XmlDocument doc = new XmlDocument();
+            doc.Load(changePath);
+            var a = doc.SelectSingleNode("versionCfg/conf[@os='"+ changeOs + @"']").Attributes["version"].InnerXml = curVer;
+            doc.Save(changePath);
         }
 
         private void CopyFinalZipPack()

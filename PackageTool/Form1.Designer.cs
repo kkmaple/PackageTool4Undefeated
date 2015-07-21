@@ -175,6 +175,7 @@
             this.Controls.Add(this.OriginalBaseVerLabel);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PackageTool";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
@@ -209,6 +210,8 @@
         private string changePath;
         //online folder
         private string onlineFolder;
+        //change os
+        private string changeOs;
     }
 }
 
