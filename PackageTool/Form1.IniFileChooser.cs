@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -183,6 +184,16 @@ namespace PackageTool
 #endif
                 p("exit");
             });
+        }
+
+        private void UpdateLocalizationFile()
+        {
+
+        }
+
+        private void CopyLocallizationFile()
+        {
+            FileSystem.CopyDirectory("","");
         }
     }
 }
