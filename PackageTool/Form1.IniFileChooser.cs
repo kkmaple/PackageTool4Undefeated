@@ -41,7 +41,7 @@ namespace PackageTool
 #else
             GetPrivateProfileString("init_value", "version_len", "", temp, 255, "./pkgconf.ini");
 #endif
-            verLen = Int32.Parse(temp.ToString());
+            verLen = temp.ToString().Length;
 #if DEBUG
             GetPrivateProfileString("gener_value", "md5txtpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
 #else
@@ -153,6 +153,7 @@ namespace PackageTool
         private void DoPack()
         {
             //Svn 更新Media目录
+            //MessageBox.Show(resPath);
             SVN.Update(resPath);
             UpdateLocalizationFile();
             CopyLocallizationFile();
@@ -161,7 +162,7 @@ namespace PackageTool
             cmd.RunCmd(@"del /f /q *.zip *.zs5");
             //检查md5文件
             CheckMd5File();
-            //cmd.RunCmd(@"file_generator.py");
+            cmd.RunCmd(@"file_generator.py");
 #if TEST
             DiffTowFile();
             var result = MessageBox.Show("继续么？", "提示",
@@ -256,6 +257,13 @@ namespace PackageTool
         private void SynVersion()
         {
             StringBuilder temp = new StringBuilder(255);
+            GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-trunk.ini");
+            string trunkBasepath = temp.ToString();
+            GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-test.ini");
+            string testBasepath = temp.ToString();
+            if (Directory.Exists(testBasepath))
+            Directory.Delete(testBasepath, true);
+            FileSystem.CopyDirectory(trunkBasepath, testBasepath, true);
             GetPrivateProfileString("init_value", "current_base", "", temp, 255, "./pkgconf-trunk.ini");
             WritePrivateProfileString("init_value", "current_base", temp.ToString(), "./pkgconf-test.ini");
             WritePrivateProfileString("resource_list", null, null, "./pkgconf-test.ini");
@@ -268,6 +276,7 @@ namespace PackageTool
             }
             InitData();
             RefreshUIData();
+            MessageBox.Show("同步完成！");
         }
 
         private void DiffTowFile()
