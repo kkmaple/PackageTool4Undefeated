@@ -133,7 +133,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy D:\PackageTool\PackageTool\bin\Release-TEST\PackageTool.exe F:\1.6.0.0_ios\package-ios\  /R /D /Y</PostBuildEvent>
+    <PostBuildEvent>copy /y D:\PackageTool\PackageTool\bin\Release\PackageTool.exe F:\1.6.0.0_ios\package-ios\PackageTool-trunk.exe
+copy /y D:\PackageTool\PackageTool\bin\Release-TEST\PackageTool.exe F:\1.6.0.0_ios\package-ios\PackageTool-test.exe</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

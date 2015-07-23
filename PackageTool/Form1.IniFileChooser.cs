@@ -287,12 +287,14 @@ namespace PackageTool
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #else
             string lastVer = "";
-            if (verLen == 1)
+            if (verLen == 1 && Int32.Parse(curVer.Split('.')[2]) > 0)
                 lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
             else
             {
-                if(Int32.Parse(curVer.Split('.')[2]) < 11)
+                if (Int32.Parse(curVer.Split('.')[2]) < 11 && Int32.Parse(curVer.Split('.')[2]) > 0)
                     lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + ".0" + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
+                else if (Int32.Parse(curVer.Split('.')[2]) > 0)
+                    lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
             }
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #endif
