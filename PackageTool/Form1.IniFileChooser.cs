@@ -41,7 +41,7 @@ namespace PackageTool
 #else
             GetPrivateProfileString("init_value", "version_len", "", temp, 255, "./pkgconf.ini");
 #endif
-            verLen = temp.ToString().Length;
+            verLen = Int32.Parse(temp.ToString());
 #if DEBUG
             GetPrivateProfileString("gener_value", "md5txtpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
 #else
@@ -141,6 +141,7 @@ namespace PackageTool
             testSynBtn.Visible = true;
 #else
             iniFileName = "pkgconf-trunk.ini";
+            autoCompareCheckBox.Visible = true;
 #endif
             //拷贝pkgconf.ini文件
 #if DEBUG
@@ -172,9 +173,24 @@ namespace PackageTool
             // If the no button was pressed ...
             if (result == DialogResult.No)
             {
+                if (File.Exists(resmd5txtFolder + "/" + curVer + ".txt"))
+                    File.Delete(resmd5txtFolder + "/" + curVer + ".txt");
                 return;
             }
+#else
+            if (autoCompareCheckBox.Checked)
+            {
+                DiffTowFile();
+                var result = MessageBox.Show("继续么？", "提示",
+                                            MessageBoxButtons.YesNo,
+                                            MessageBoxIcon.Warning);
 
+                // If the no button was pressed ...
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
 #endif
             cmd.RunCmd(@"md5cmp.py");
             cmd.RunCmd(@"tool.py");
@@ -259,10 +275,12 @@ namespace PackageTool
             StringBuilder temp = new StringBuilder(255);
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-trunk.ini");
             string trunkBasepath = temp.ToString();
+            MessageBox.Show("trunkBasepath" + trunkBasepath);
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-test.ini");
             string testBasepath = temp.ToString();
+            MessageBox.Show("testBasepath" + testBasepath);
             if (Directory.Exists(testBasepath))
-            Directory.Delete(testBasepath, true);
+                Directory.Delete(testBasepath, true);
             FileSystem.CopyDirectory(trunkBasepath, testBasepath, true);
             GetPrivateProfileString("init_value", "current_base", "", temp, 255, "./pkgconf-trunk.ini");
             WritePrivateProfileString("init_value", "current_base", temp.ToString(), "./pkgconf-test.ini");

@@ -42,6 +42,7 @@
             this.GoGoGo = new System.Windows.Forms.Button();
             this.compareBtn = new System.Windows.Forms.Button();
             this.testSynBtn = new System.Windows.Forms.Button();
+            this.autoCompareCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // OriginalBaseVerLabel
@@ -173,11 +174,26 @@
             this.testSynBtn.Visible = false;
             this.testSynBtn.Click += new System.EventHandler(this.testSynBtn_Click);
             // 
+            // autoCompareCheckBox
+            // 
+            this.autoCompareCheckBox.AutoSize = true;
+            this.autoCompareCheckBox.Checked = true;
+            this.autoCompareCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoCompareCheckBox.Location = new System.Drawing.Point(421, 96);
+            this.autoCompareCheckBox.Name = "autoCompareCheckBox";
+            this.autoCompareCheckBox.Size = new System.Drawing.Size(96, 16);
+            this.autoCompareCheckBox.TabIndex = 14;
+            this.autoCompareCheckBox.Text = "是否自动对比";
+            this.autoCompareCheckBox.UseVisualStyleBackColor = true;
+            this.autoCompareCheckBox.Visible = false;
+            this.autoCompareCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 391);
+            this.Controls.Add(this.autoCompareCheckBox);
             this.Controls.Add(this.testSynBtn);
             this.Controls.Add(this.compareBtn);
             this.Controls.Add(this.GoGoGo);
@@ -237,6 +253,7 @@
         private string iniFileName;
         private System.Windows.Forms.Button testSynBtn;
         private int verLen;
+        private System.Windows.Forms.CheckBox autoCompareCheckBox;
     }
 }
 
