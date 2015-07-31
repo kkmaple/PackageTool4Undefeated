@@ -153,11 +153,13 @@ namespace PackageTool
 
         private void DoPack()
         {
+            
             //Svn 更新Media目录
             //MessageBox.Show(resPath);
             SVN.Update(resPath);
             UpdateLocalizationFile();
             CopyLocallizationFile();
+            BackupResDir();
             Command cmd = new Command();
             //删除之前的zip和zs5文件
             cmd.RunCmd(@"del /f /q *.zip *.zs5");
@@ -194,6 +196,8 @@ namespace PackageTool
 #endif
             cmd.RunCmd(@"md5cmp.py");
             cmd.RunCmd(@"tool.py");
+            if (Directory.Exists("unzip"))
+                Directory.Delete("unzip", true);
             cmd.RunCmd(@"解压拷贝.bat");
             //拷贝最新的ini文件
 #if DEBUG
@@ -275,10 +279,10 @@ namespace PackageTool
             StringBuilder temp = new StringBuilder(255);
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-trunk.ini");
             string trunkBasepath = temp.ToString();
-            MessageBox.Show("trunkBasepath" + trunkBasepath);
+            //MessageBox.Show("trunkBasepath" + trunkBasepath);
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-test.ini");
             string testBasepath = temp.ToString();
-            MessageBox.Show("testBasepath" + testBasepath);
+            //MessageBox.Show("testBasepath" + testBasepath);
             if (Directory.Exists(testBasepath))
                 Directory.Delete(testBasepath, true);
             FileSystem.CopyDirectory(trunkBasepath, testBasepath, true);
@@ -316,6 +320,15 @@ namespace PackageTool
             }
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #endif
+        }
+
+        private void BackupResDir()
+        {
+            string destDir = Path.GetDirectoryName(BasePathTxt.Text);
+            if (Directory.Exists(destDir + "\\" + curVer + " - formal"))
+                Directory.Delete(destDir + "\\" + curVer + " - formal", true);
+            if(Directory.Exists(BasePathTxt.Text))
+                FileSystem.CopyDirectory(BasePathTxt.Text, destDir + "\\" + curVer + " - formal", true);
         }
     }
 }
