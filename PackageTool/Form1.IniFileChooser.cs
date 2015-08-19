@@ -159,7 +159,7 @@ namespace PackageTool
             SVN.Update(resPath);
             UpdateLocalizationFile();
             CopyLocallizationFile();
-            BackupResDir();
+            //BackupResDir();
             Command cmd = new Command();
             //删除之前的zip和zs5文件
             cmd.RunCmd(@"del /f /q *.zip *.zs5");
@@ -324,11 +324,13 @@ namespace PackageTool
 
         private void BackupResDir()
         {
+#if !TEST
             string destDir = Path.GetDirectoryName(BasePathTxt.Text);
             if (Directory.Exists(destDir + "\\" + curVer + " - formal"))
                 Directory.Delete(destDir + "\\" + curVer + " - formal", true);
             if(Directory.Exists(BasePathTxt.Text))
                 FileSystem.CopyDirectory(BasePathTxt.Text, destDir + "\\" + curVer + " - formal", true);
+#endif
         }
     }
 }
