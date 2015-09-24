@@ -60,5 +60,15 @@ namespace PackageTool
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DoBigPatch();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            RedoBigPatch();
+        }
     }
 }

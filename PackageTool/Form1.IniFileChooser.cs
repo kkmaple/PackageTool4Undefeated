@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -151,7 +153,7 @@ namespace PackageTool
 #endif
         }
 
-        private void DoPack()
+        private bool DoPack(bool showEnd = true)
         {
             
             //Svn 更新Media目录
@@ -177,7 +179,7 @@ namespace PackageTool
             {
                 if (File.Exists(resmd5txtFolder + "/" + curVer + ".txt"))
                     File.Delete(resmd5txtFolder + "/" + curVer + ".txt");
-                return;
+                return false;
             }
 #else
             if (autoCompareCheckBox.Checked)
@@ -190,7 +192,7 @@ namespace PackageTool
                 // If the no button was pressed ...
                 if (result == DialogResult.No)
                 {
-                    return;
+                    return false;
                 }
             }
 #endif
@@ -203,13 +205,18 @@ namespace PackageTool
 #if DEBUG
             File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/" + iniFileName, true);
 #else
-            File.Copy("./pkgconf.ini", iniFileName, true);
+            if(showEnd)
+                File.Copy("./pkgconf.ini", iniFileName, true);
 #endif
             //修改xml文件
-            ModifyChangeXml();
+            if (showEnd)
+                ModifyChangeXml();
             //拷贝最终的zip包
             //CopyFinalZipPack();
-            MessageBox.Show(curPath.Split('\\')[curPath.Split('\\').Length - 1] + " 更新包已打出！");
+            if(showEnd)
+                MessageBox.Show(curPath.Split('\\')[curPath.Split('\\').Length - 1] + " 更新包已打出！");
+
+            return true;
         }
 
         private void CheckMd5File()
@@ -318,6 +325,7 @@ namespace PackageTool
                 else if (Int32.Parse(curVer.Split('.')[2]) > 0)
                     lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
             }
+            MessageBox.Show("lastVer: " + lastVer + " curVer: " + CurVerTxt.Text);
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #endif
         }
@@ -331,6 +339,110 @@ namespace PackageTool
             if(Directory.Exists(BasePathTxt.Text))
                 FileSystem.CopyDirectory(BasePathTxt.Text, destDir + "\\" + curVer + " - formal", true);
 #endif
+        }
+
+        private void DoBigPatch()
+        { 
+#if !TEST
+
+#endif
+        }
+
+        private void RedoBigPatch()
+        {
+#if !TEST
+            //VersionUpgrade();
+            //if (!DoPack(false))
+            //    return;
+            StringBuilder temp = new StringBuilder(255);
+            XmlDocument doc = new XmlDocument();
+            GetPrivateProfileString("version", "ver", "", temp, 255, "./bigPatch.ini");
+            //doc.Load(BasePathTxt.Text + "/version.xml");
+            //var a = doc.SelectSingleNode("versionCfg/Property[@name='" + "version" + @"']").Attributes["value"].InnerXml = temp.ToString();
+            //doc.Save(BasePathTxt.Text + "/version.xml");
+            //if (File.Exists(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"))
+            //    File.Delete(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
+            //File.Move(curPath + "/Paks/Media.pak", BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
+            //String msdstringsass = MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
+            FileStream fs = File.OpenWrite(BasePathTxt.Text + "/Media_" + temp.ToString() + ".zs5");
+            byte[] data = new UTF8Encoding().GetBytes(MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"));
+            fs.Write(data, 0, data.Length);
+            fs.Flush();
+            fs.Close();
+            MessageBox.Show(" 大包已重打！");
+            Application.Exit();
+#endif
+        }
+
+        /// <summary>
+        /// 计算文件的 MD5 值
+        /// </summary>
+        /// <param name="fileName">要计算 MD5 值的文件名和路径</param>
+        /// <returns>MD5 值16进制字符串</returns>
+        public static String MD5File(String fileName)
+        {
+            return HashFile(fileName, "md5");
+        }
+
+        /// <summary>
+        /// 计算文件的哈希值
+        /// </summary>
+        /// <param name="fileName">要计算哈希值的文件名和路径</param>
+        /// <param name="algName">算法:sha1,md5</param>
+        /// <returns>哈希值16进制字符串</returns>
+        public static String HashFile(String fileName, String algName)
+        {
+            if (!System.IO.File.Exists(fileName))
+                return String.Empty;
+
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            byte[] hashBytes = HashData(fs, algName);
+            fs.Close();
+            return ByteArrayToHexString(hashBytes);
+        }
+
+        /// <summary>
+        /// 计算哈希值
+        /// </summary>
+        /// <param name="stream">要计算哈希值的 Stream</param>
+        /// <param name="algName">算法:sha1,md5</param>
+        /// <returns>哈希值字节数组</returns>
+        public static byte[] HashData(Stream stream, String algName)
+        {
+            HashAlgorithm algorithm;
+            if (algName == null)
+            {
+                throw new ArgumentNullException("algName 不能为 null");
+            }
+            if (String.Compare(algName, "sha1", true) == 0)
+            {
+                algorithm = SHA1.Create();
+            }
+            else
+            {
+                if (String.Compare(algName, "md5", true) != 0)
+                {
+                    throw new Exception("algName 只能使用 sha1 或 md5");
+                }
+                algorithm = MD5.Create();
+            }
+            return algorithm.ComputeHash(stream);
+        }
+
+        /// <summary>
+        /// 字节数组转换为16进制表示的字符串
+        /// </summary>
+        public static String ByteArrayToHexString(byte[] buf)
+        {
+            String returnStr = "";
+            if (buf != null)
+            {
+                for (int i = 0; i < buf.Length; i++)
+                {
+                    returnStr += buf[i].ToString("X2");
+                }
+            }
+            return returnStr.ToLower();
         }
     }
 }

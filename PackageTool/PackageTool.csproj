@@ -62,7 +62,9 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -133,9 +135,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y D:\PackageTool\PackageTool\bin\Release\PackageTool.exe F:\1.6.0.0_ios\package-ios\PackageTool-trunk.exe
-copy /y D:\PackageTool\PackageTool\bin\Release-TEST\PackageTool.exe F:\1.6.0.0_ios\package-ios\PackageTool-test.exe
-copy /y D:\PackageTool\PackageTool\changelog.txt F:\1.6.0.0_ios\package-ios\changelog.txt</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

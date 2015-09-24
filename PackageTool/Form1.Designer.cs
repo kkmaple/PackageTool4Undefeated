@@ -43,6 +43,8 @@
             this.compareBtn = new System.Windows.Forms.Button();
             this.testSynBtn = new System.Windows.Forms.Button();
             this.autoCompareCheckBox = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OriginalBaseVerLabel
@@ -188,11 +190,34 @@
             this.autoCompareCheckBox.Visible = false;
             this.autoCompareCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(64, 328);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "打大包";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(456, 338);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 16;
+            this.button2.Text = "重打大包";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 391);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.autoCompareCheckBox);
             this.Controls.Add(this.testSynBtn);
             this.Controls.Add(this.compareBtn);
@@ -254,6 +279,8 @@
         private System.Windows.Forms.Button testSynBtn;
         private int verLen;
         private System.Windows.Forms.CheckBox autoCompareCheckBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
