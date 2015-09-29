@@ -33,6 +33,12 @@ namespace PackageTool
 #endif
             curVer = CurVerTxt.Text = temp.ToString();
 #if DEBUG
+            GetPrivateProfileString("gener_value", "svncodedir", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
+#else
+            GetPrivateProfileString("gener_value", "svncodedir", "", temp, 255, "./pkgconf.ini");
+#endif
+            svnpath = temp.ToString();
+#if DEBUG
             GetPrivateProfileString("init_value", "xmlbasever", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
 #else
             GetPrivateProfileString("init_value", "xmlbasever", "", temp, 255, "./pkgconf.ini");
@@ -325,7 +331,7 @@ namespace PackageTool
                 else if (Int32.Parse(curVer.Split('.')[2]) > 0)
                     lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
             }
-            MessageBox.Show("lastVer: " + lastVer + " curVer: " + CurVerTxt.Text);
+            //MessageBox.Show("lastVer: " + lastVer + " curVer: " + CurVerTxt.Text);
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #endif
         }
@@ -344,26 +350,32 @@ namespace PackageTool
         private void DoBigPatch()
         { 
 #if !TEST
-
+            Command cmd = new Command();
+            cmd.RunCmd("generateBigPatch.py");
+            MessageBox.Show(" 大包已打！");
+            Application.Exit();
 #endif
         }
 
         private void RedoBigPatch()
         {
 #if !TEST
-            //VersionUpgrade();
-            //if (!DoPack(false))
-            //    return;
+            VersionUpgrade();
+            if (!DoPack(false))
+                return;
             StringBuilder temp = new StringBuilder(255);
             XmlDocument doc = new XmlDocument();
             GetPrivateProfileString("version", "ver", "", temp, 255, "./bigPatch.ini");
-            //doc.Load(BasePathTxt.Text + "/version.xml");
-            //var a = doc.SelectSingleNode("versionCfg/Property[@name='" + "version" + @"']").Attributes["value"].InnerXml = temp.ToString();
-            //doc.Save(BasePathTxt.Text + "/version.xml");
-            //if (File.Exists(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"))
-            //    File.Delete(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
-            //File.Move(curPath + "/Paks/Media.pak", BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
-            //String msdstringsass = MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
+            doc.Load(BasePathTxt.Text + "/version.xml");
+            var a = doc.SelectSingleNode("versionCfg/Property[@name='" + "version" + @"']").Attributes["value"].InnerXml = temp.ToString();
+            doc.Save(BasePathTxt.Text + "/version.xml");
+            if (File.Exists(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"))
+                File.Delete(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
+            Command cmd = new Command();
+            //MessageBox.Show(svnpath + @"/Tools/ZLibTool.exe");
+            cmd.RunCmd(svnpath + @"/Tools/ZLibTool.exe");
+            File.Move(curPath + "/Paks/Media.pak", BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
+            String msdstringsass = MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             FileStream fs = File.OpenWrite(BasePathTxt.Text + "/Media_" + temp.ToString() + ".zs5");
             byte[] data = new UTF8Encoding().GetBytes(MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"));
             fs.Write(data, 0, data.Length);
