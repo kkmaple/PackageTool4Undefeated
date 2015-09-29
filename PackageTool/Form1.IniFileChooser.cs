@@ -20,81 +20,45 @@ namespace PackageTool
         private void RefreshUIData()
         {
             StringBuilder temp = new StringBuilder(255);
-#if DEBUG
-            GetPrivateProfileString("init_value", "basepath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf.ini");
-#endif
             BasePathTxt.Text = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("init_value", "current_base", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("init_value", "current_base", "", temp, 255, "./pkgconf.ini");
-#endif
             curVer = CurVerTxt.Text = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("gener_value", "svncodedir", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("gener_value", "svncodedir", "", temp, 255, "./pkgconf.ini");
-#endif
             svnpath = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("init_value", "xmlbasever", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("init_value", "xmlbasever", "", temp, 255, "./pkgconf.ini");
-#endif
             BaseVerTxt.Text = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("init_value", "version_len", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("init_value", "version_len", "", temp, 255, "./pkgconf.ini");
-#endif
             verLen = Int32.Parse(temp.ToString());
-#if DEBUG
-            GetPrivateProfileString("gener_value", "md5txtpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("gener_value", "md5txtpath", "", temp, 255, "./pkgconf.ini");
-#endif
             resmd5txtFolder = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("changexml_path", "changexmlpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("changexml_path", "changexmlpath", "", temp, 255, "./pkgconf.ini");
-#endif
             changePath = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("changexml_path", "os", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("changexml_path", "os", "", temp, 255, "./pkgconf.ini");
-#endif
             changeOs = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("online_folder", "onlinefolder", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("online_folder", "onlinefolder", "", temp, 255, "./pkgconf.ini");
-#endif
             onlineFolder = temp.ToString();
-#if DEBUG
-            GetPrivateProfileString("localization", "locpath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("localization", "locpath", "", temp, 255, "./pkgconf.ini");
-#endif
             locPath = temp.ToString();
-            #if DEBUG
-            GetPrivateProfileString("localization", "respath", "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
             GetPrivateProfileString("localization", "respath", "", temp, 255, "./pkgconf.ini");
-#endif
             resPath = temp.ToString();
             //添加resource list
             ResList.Items.Clear();
             for (int i = 1; ; ++i)
             {
-#if DEBUG
-                GetPrivateProfileString("resource_list", "base" + i, "", temp, 255, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
+
                 GetPrivateProfileString("resource_list", "base" + i, "", temp, 255, "./pkgconf.ini");
-#endif
                 if (temp.ToString() == "")
                     break;
 
@@ -103,6 +67,9 @@ namespace PackageTool
             }
         }
 
+        /// <summary>
+        /// 更新版本
+        /// </summary>
         private void VersionUpgrade()
         {
             //计算新版本
@@ -122,21 +89,16 @@ namespace PackageTool
             newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + newVer + "." + nowVer.Split('.')[3];
 #endif
             //设置新版本
-#if DEBUG
-            WritePrivateProfileString("init_value", "current_base", newVer, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
             WritePrivateProfileString("init_value", "current_base", newVer, "./pkgconf.ini");
-#endif
             //添加旧版本
-#if DEBUG
-            WritePrivateProfileString("resource_list", "base" + (verCount+1), nowVer, "F:/1.6.0.0_ios/package-ios/pkgconf.ini");
-#else
             WritePrivateProfileString("resource_list", "base" + (verCount+1), nowVer, "./pkgconf.ini");
-#endif
             //刷新数据,源界面显示
             RefreshUIData();
         }
 
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
         private void InitData()
         {
             //获取当前工作目录
@@ -152,22 +114,21 @@ namespace PackageTool
             autoCompareCheckBox.Visible = true;
 #endif
             //拷贝pkgconf.ini文件
-#if DEBUG
-            File.Copy("F:/1.6.0.0_ios/package-ios/" + iniFileName, "F:/1.6.0.0_ios/package-ios/pkgconf.ini", true);
-#else
             File.Copy(iniFileName, "./pkgconf.ini", true);
-#endif
         }
 
+        /// <summary>
+        /// 打包
+        /// </summary>
+        /// <param name="showEnd">true 打包 false 重打大包</param>
+        /// <returns>是否成功</returns>
         private bool DoPack(bool showEnd = true)
         {
             
             //Svn 更新Media目录
-            //MessageBox.Show(resPath);
             SVN.Update(resPath);
             UpdateLocalizationFile();
             CopyLocallizationFile();
-            //BackupResDir();
             Command cmd = new Command();
             //删除之前的zip和zs5文件
             cmd.RunCmd(@"del /f /q *.zip *.zs5");
@@ -208,23 +169,20 @@ namespace PackageTool
                 Directory.Delete("unzip", true);
             cmd.RunCmd(@"解压拷贝.bat");
             //拷贝最新的ini文件
-#if DEBUG
-            File.Copy("F:/1.6.0.0_ios/package-ios/pkgconf.ini", "F:/1.6.0.0_ios/package-ios/" + iniFileName, true);
-#else
             if(showEnd)
                 File.Copy("./pkgconf.ini", iniFileName, true);
-#endif
             //修改xml文件
             if (showEnd)
                 ModifyChangeXml();
-            //拷贝最终的zip包
-            //CopyFinalZipPack();
             if(showEnd)
                 MessageBox.Show(curPath.Split('\\')[curPath.Split('\\').Length - 1] + " 更新包已打出！");
 
             return true;
         }
 
+        /// <summary>
+        /// 重命名已有的MD5文件
+        /// </summary>
         private void CheckMd5File()
         {
             if (File.Exists(resmd5txtFolder + "/" + curVer + ".txt"))
@@ -239,6 +197,9 @@ namespace PackageTool
             }
         }
 
+        /// <summary>
+        /// 修改change.xml
+        /// </summary>
         private void ModifyChangeXml()
         {
             XmlDocument doc = new XmlDocument();
@@ -247,31 +208,18 @@ namespace PackageTool
             doc.Save(changePath);
         }
 
-        private void CopyFinalZipPack()
-        {
-            DateTime now = DateTime.Now;
-            if (!Directory.Exists(onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer))
-            {
-                //Directory.Delete(onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer, true);
-                Directory.CreateDirectory(onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer);
-            }
-            Command.ExecBatCommand(p =>
-            {
-#if DEBUG
-                p("xcopy " + @"F:\1.6.0.0_ios\package-ios" + @"\*.zip " + onlineFolder + @"\" + now.Year + now.Month + now.Day + "-" + curVer + " /R /D /Y");
-#else
-                p("xcopy "+ curPath + "/*.zip " + onlineFolder + "/" + now.Year + now.Month + now.Day + "-" + curVer + " /R /D /Y");
-#endif
-                p("exit");
-            });
-        }
-
+        /// <summary>
+        /// 更新本地化文件
+        /// </summary>
         private void UpdateLocalizationFile()
         {
             if ("" != locPath)
                 SVN.Update(locPath);
         }
 
+        /// <summary>
+        /// 复制本地化文件
+        /// </summary>
         private void CopyLocallizationFile()
         {
             if ("" != locPath)
@@ -287,15 +235,16 @@ namespace PackageTool
             }
         }
 
+        /// <summary>
+        /// 测试版同步功能
+        /// </summary>
         private void SynVersion()
         {
             StringBuilder temp = new StringBuilder(255);
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-trunk.ini");
             string trunkBasepath = temp.ToString();
-            //MessageBox.Show("trunkBasepath" + trunkBasepath);
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf-test.ini");
             string testBasepath = temp.ToString();
-            //MessageBox.Show("testBasepath" + testBasepath);
             if (Directory.Exists(testBasepath))
                 Directory.Delete(testBasepath, true);
             FileSystem.CopyDirectory(trunkBasepath, testBasepath, true);
@@ -314,6 +263,9 @@ namespace PackageTool
             MessageBox.Show("同步完成！");
         }
 
+        /// <summary>
+        /// 比较差异文件
+        /// </summary>
         private void DiffTowFile()
         {
 #if TEST
@@ -331,22 +283,13 @@ namespace PackageTool
                 else if (Int32.Parse(curVer.Split('.')[2]) > 0)
                     lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
             }
-            //MessageBox.Show("lastVer: " + lastVer + " curVer: " + CurVerTxt.Text);
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #endif
         }
 
-        private void BackupResDir()
-        {
-#if !TEST
-            string destDir = Path.GetDirectoryName(BasePathTxt.Text);
-            if (Directory.Exists(destDir + "\\" + curVer + " - formal"))
-                Directory.Delete(destDir + "\\" + curVer + " - formal", true);
-            if(Directory.Exists(BasePathTxt.Text))
-                FileSystem.CopyDirectory(BasePathTxt.Text, destDir + "\\" + curVer + " - formal", true);
-#endif
-        }
-
+        /// <summary>
+        /// 打大包
+        /// </summary>
         private void DoBigPatch()
         { 
 #if !TEST
@@ -357,6 +300,9 @@ namespace PackageTool
 #endif
         }
 
+        /// <summary>
+        /// 重新打大包
+        /// </summary>
         private void RedoBigPatch()
         {
 #if !TEST
@@ -372,7 +318,6 @@ namespace PackageTool
             if (File.Exists(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"))
                 File.Delete(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             Command cmd = new Command();
-            //MessageBox.Show(svnpath + @"/Tools/ZLibTool.exe");
             cmd.RunCmd(svnpath + @"/Tools/ZLibTool.exe");
             File.Move(curPath + "/Paks/Media.pak", BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             String msdstringsass = MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
