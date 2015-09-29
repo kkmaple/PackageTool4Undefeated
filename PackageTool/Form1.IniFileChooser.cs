@@ -68,7 +68,7 @@ namespace PackageTool
         }
 
         /// <summary>
-        /// 更新版本
+        /// 更新Version
         /// </summary>
         private void VersionUpgrade()
         {
@@ -118,7 +118,7 @@ namespace PackageTool
         }
 
         /// <summary>
-        /// 打包
+        /// 打小包
         /// </summary>
         /// <param name="showEnd">true 打包 false 重打大包</param>
         /// <returns>是否成功</returns>
@@ -331,6 +331,7 @@ namespace PackageTool
 #endif
         }
 
+        #region hash tool functions
         /// <summary>
         /// 计算文件的 MD5 值
         /// </summary>
@@ -401,5 +402,6 @@ namespace PackageTool
             }
             return returnStr.ToLower();
         }
+        #endregion
     }
 }
