@@ -45,6 +45,8 @@
             this.autoCompareCheckBox = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.scriptCheckBox = new System.Windows.Forms.CheckBox();
+            this.fileCheckerBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OriginalBaseVerLabel
@@ -133,7 +135,6 @@
             this.BasePathBrowserBtn.Text = "浏览...";
             this.BasePathBrowserBtn.UseVisualStyleBackColor = true;
             this.BasePathBrowserBtn.Visible = false;
-            this.BasePathBrowserBtn.Click += new System.EventHandler(this.BasePathBrowserBtn_Click);
             // 
             // NewVerBtn
             // 
@@ -188,7 +189,6 @@
             this.autoCompareCheckBox.Text = "是否自动对比";
             this.autoCompareCheckBox.UseVisualStyleBackColor = true;
             this.autoCompareCheckBox.Visible = false;
-            this.autoCompareCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // button1
             // 
@@ -210,11 +210,35 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // scriptCheckBox
+            // 
+            this.scriptCheckBox.AutoSize = true;
+            this.scriptCheckBox.Checked = true;
+            this.scriptCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.scriptCheckBox.Location = new System.Drawing.Point(67, 215);
+            this.scriptCheckBox.Name = "scriptCheckBox";
+            this.scriptCheckBox.Size = new System.Drawing.Size(108, 16);
+            this.scriptCheckBox.TabIndex = 17;
+            this.scriptCheckBox.Text = "是否拷贝Script";
+            this.scriptCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // fileCheckerBtn
+            // 
+            this.fileCheckerBtn.Location = new System.Drawing.Point(64, 274);
+            this.fileCheckerBtn.Name = "fileCheckerBtn";
+            this.fileCheckerBtn.Size = new System.Drawing.Size(75, 23);
+            this.fileCheckerBtn.TabIndex = 18;
+            this.fileCheckerBtn.Text = "文件查重";
+            this.fileCheckerBtn.UseVisualStyleBackColor = true;
+            this.fileCheckerBtn.Click += new System.EventHandler(this.fileCheckerBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 391);
+            this.Controls.Add(this.fileCheckerBtn);
+            this.Controls.Add(this.scriptCheckBox);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.autoCompareCheckBox);
@@ -272,6 +296,8 @@
         private string locPath;
         //res media path
         private string resPath;
+        //res script path
+        private string scriptPath;
         private System.Windows.Forms.Button compareBtn;
         //svn path
         private string svnpath;
@@ -282,6 +308,8 @@
         private System.Windows.Forms.CheckBox autoCompareCheckBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox scriptCheckBox;
+        private System.Windows.Forms.Button fileCheckerBtn;
     }
 }
 

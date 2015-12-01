@@ -53,6 +53,9 @@ namespace PackageTool
 
             GetPrivateProfileString("localization", "respath", "", temp, 255, "./pkgconf.ini");
             resPath = temp.ToString();
+
+            GetPrivateProfileString("localization", "scriptpath", "", temp, 255, "./pkgconf.ini");
+            scriptPath = temp.ToString();
             //添加resource list
             ResList.Items.Clear();
             for (int i = 1; ; ++i)
@@ -122,9 +125,12 @@ namespace PackageTool
         /// <returns>是否成功</returns>
         private bool DoPack(bool showEnd = true)
         {
-            
+            if (scriptCheckBox.Checked && scriptPath != "")
+            {
+                FileSystem.CopyDirectory(scriptPath, Path.Combine(resPath, Path.GetFileName(scriptPath)), true);
+            }
             //Svn 更新Media目录
-            SVN.Update(resPath);
+            //SVN.Update(resPath);
             UpdateLocalizationFile();
             CopyLocallizationFile();
             Command cmd = new Command();
@@ -165,7 +171,8 @@ namespace PackageTool
             cmd.RunCmd(@"tool.py");
             if (Directory.Exists("unzip"))
                 Directory.Delete("unzip", true);
-            cmd.RunCmd(@"解压拷贝.bat");
+            if (showEnd)
+                cmd.RunCmd(@"解压拷贝.bat");
             //拷贝最新的ini文件
             if(showEnd)
                 File.Copy("./pkgconf.ini", iniFileName, true);
@@ -200,6 +207,7 @@ namespace PackageTool
         /// </summary>
         private void ModifyChangeXml()
         {
+            return;
             XmlDocument doc = new XmlDocument();
             doc.Load(changePath);
             var a = doc.SelectSingleNode("versionCfg/conf[@os='"+ changeOs + @"']").Attributes["version"].InnerXml = curVer;
@@ -222,7 +230,19 @@ namespace PackageTool
         {
             if ("" != locPath)
             {
-                FileSystem.CopyDirectory(locPath, resPath, true);
+                string[] dirs = Directory.GetDirectories(locPath, "*", System.IO.SearchOption.TopDirectoryOnly);
+                foreach (string dir in dirs)
+                {
+                    if (!dir.Contains(".svn"))
+                    {
+                        FileSystem.CopyDirectory(dir, Path.Combine( resPath, Path.GetFileName(dir)), true);
+                    }
+                }
+                string[] files = Directory.GetFiles(locPath, "*", System.IO.SearchOption.TopDirectoryOnly);
+                foreach (string file in files)
+                {
+                    File.Copy(file, Path.Combine(resPath, Path.GetFileName(file)), true);
+                }
                 Command.ExecBatCommand(p =>
                 {
                     p(resPath.Substring(0,2));
@@ -316,6 +336,7 @@ namespace PackageTool
             if (File.Exists(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"))
                 File.Delete(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             Command cmd = new Command();
+            cmd.RunCmd(@"解压拷贝.bat");
             cmd.RunCmd(svnpath + @"/Tools/ZLibTool.exe");
             File.Move(curPath + "/Paks/Media.pak", BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             String msdstringsass = MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
@@ -327,6 +348,12 @@ namespace PackageTool
             MessageBox.Show(" 大包已重打！");
             Application.Exit();
 #endif
+        }
+
+        private void FileChecker()
+        {
+            Command cmd = new Command();
+            cmd.RunCmd("file_checker.py");
         }
 
         #region hash tool functions

@@ -31,11 +31,6 @@ namespace PackageTool
             RefreshUIData();
         }
 
-        private void BasePathBrowserBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void NewVerBtn_Click(object sender, EventArgs e)
         {
             VersionUpgrade();
@@ -56,11 +51,6 @@ namespace PackageTool
             SynVersion();
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             DoBigPatch();
@@ -69,6 +59,11 @@ namespace PackageTool
         private void button2_Click(object sender, EventArgs e)
         {
             RedoBigPatch();
+        }
+
+        private void fileCheckerBtn_Click(object sender, EventArgs e)
+        {
+            FileChecker();
         }
     }
 }
