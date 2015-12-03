@@ -24,6 +24,32 @@ namespace PackageTool
             GetPrivateProfileString("init_value", "basepath", "", temp, 255, "./pkgconf.ini");
             BasePathTxt.Text = temp.ToString();
 
+            GetPrivateProfileString("init_value", "packgemode", "", temp, 255, "./pkgconf.ini");
+            if ("" == temp.ToString())
+            {
+                WritePrivateProfileString("init_value", "packgemode", packMode.ToString(), "./pkgconf.ini");
+            }
+            else
+            {
+                packMode = Int32.Parse(temp.ToString());
+            }
+
+            switch (packMode)
+            {
+                case 1:
+                    {
+                        button1.Visible = true;
+                        button2.Visible = true;
+                    }
+                    break;
+                case 2:
+                    {
+                        button1.Visible = false;
+                        button2.Visible = false;
+                    }
+                    break;
+            }
+
             GetPrivateProfileString("init_value", "current_base", "", temp, 255, "./pkgconf.ini");
             curVer = CurVerTxt.Text = temp.ToString();
 
@@ -35,6 +61,8 @@ namespace PackageTool
 
             GetPrivateProfileString("init_value", "version_len", "", temp, 255, "./pkgconf.ini");
             verLen = Int32.Parse(temp.ToString());
+            if (2 == packMode)
+                verLen = 1;
 
             GetPrivateProfileString("gener_value", "md5txtpath", "", temp, 255, "./pkgconf.ini");
             resmd5txtFolder = temp.ToString();
@@ -58,6 +86,7 @@ namespace PackageTool
             scriptPath = temp.ToString();
             //添加resource list
             ResList.Items.Clear();
+            verCount = 0;
             for (int i = 1; ; ++i)
             {
 
@@ -82,12 +111,24 @@ namespace PackageTool
             newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + nowVer.Split('.')[2] + "." + newVer;
 #else
             string newVer = "";
-            for (int i = 1; i < verLen && Int32.Parse(nowVer.Split('.')[2]) < 9; ++i)
+            if (1 == packMode)
             {
-                newVer += "0";
+                for (int i = 1; i < verLen && Int32.Parse(nowVer.Split('.')[2]) < 9; ++i)
+                {
+                    newVer += "0";
+                }
+                newVer += Int32.Parse(nowVer.Split('.')[2]) + 1;
+                newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + newVer + "." + nowVer.Split('.')[3];
             }
-            newVer += Int32.Parse(nowVer.Split('.')[2]) + 1;
-            newVer = nowVer.Split('.')[0] + "." + nowVer.Split('.')[1] + "." + newVer + "." + nowVer.Split('.')[3];
+            else if (2 == packMode)
+            {
+                for (int i = 1; i < verLen && Int32.Parse(nowVer.Split('.')[1]) < 9; ++i)
+                {
+                    newVer += "0";
+                }
+                newVer += Int32.Parse(nowVer.Split('.')[1]) + 1;
+                newVer = nowVer.Split('.')[0] + "." + newVer + "." + nowVer.Split('.')[2] + "." + nowVer.Split('.')[3];
+            }
 #endif
             //设置新版本
             WritePrivateProfileString("init_value", "current_base", newVer, "./pkgconf.ini");
@@ -116,6 +157,8 @@ namespace PackageTool
 #endif
             //拷贝pkgconf.ini文件
             File.Copy(iniFileName, "./pkgconf.ini", true);
+
+            this.packMode = 1;
         }
 
         /// <summary>
@@ -292,14 +335,22 @@ namespace PackageTool
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #else
             string lastVer = "";
-            if (verLen == 1 && Int32.Parse(curVer.Split('.')[2]) > 0)
-                lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
-            else
+            if (1 == packMode)
             {
-                if (Int32.Parse(curVer.Split('.')[2]) < 11 && Int32.Parse(curVer.Split('.')[2]) > 0)
-                    lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + ".0" + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
-                else if (Int32.Parse(curVer.Split('.')[2]) > 0)
-                    lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
+                if (verLen == 1 && Int32.Parse(curVer.Split('.')[2]) > 0)
+                    lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
+                else
+                {
+                    if (Int32.Parse(curVer.Split('.')[2]) < 11 && Int32.Parse(curVer.Split('.')[2]) > 0)
+                        lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + ".0" + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
+                    else if (Int32.Parse(curVer.Split('.')[2]) > 0)
+                        lastVer = curVer.Split('.')[0] + "." + curVer.Split('.')[1] + "." + (Int32.Parse(curVer.Split('.')[2]) - 1) + "." + curVer.Split('.')[3];
+                }
+            }
+            else if (2 == packMode)
+            {
+                if (Int32.Parse(curVer.Split('.')[2]) > 0)
+                    lastVer = curVer.Split('.')[0] + "." + (Int32.Parse(curVer.Split('.')[1]) - 1) + "." + curVer.Split('.')[2] + "." + curVer.Split('.')[3];
             }
             DiffTool.Diff(lastVer + ".txt", CurVerTxt.Text + ".txt", resmd5txtFolder);
 #endif
@@ -354,6 +405,64 @@ namespace PackageTool
         {
             Command cmd = new Command();
             cmd.RunCmd("file_checker.py");
+        }
+
+        private void SwitchMode()
+        {
+            if (1 == packMode)
+            {
+                packMode = 2;
+            }
+            else if (2 == packMode)
+            {
+                packMode = 1;
+            }
+            WritePrivateProfileString("init_value", "packgemode", packMode.ToString(), "./pkgconf.ini");
+
+            StringBuilder temp = new StringBuilder(255);
+            List<string> list1 = new List<string>();
+            for (int i = 1; ; ++i)
+            {
+                GetPrivateProfileString("resource_list", "base" + i, "", temp, 255, "./pkgconf.ini");
+                if (temp.ToString() == "")
+                    break;
+                list1.Add(temp.ToString());
+            }
+            list1.Add(curVer);
+            List<string> list2 = new List<string>();
+            for (int i = 1; ; ++i)
+            {
+                GetPrivateProfileString("resource_list1", "base" + i, "", temp, 255, "./pkgconf.ini");
+                if (temp.ToString() == "")
+                    break;
+                list2.Add(temp.ToString());
+            }
+
+            WritePrivateProfileString("resource_list", null, null, "./pkgconf.ini");
+            for (int i = 1; ; ++i)
+            {
+                if (i > (list2.Count - 1))
+                    break;
+                WritePrivateProfileString("resource_list", "base" + i, list2[i - 1], "./pkgconf.ini");
+            }
+            if (list2.Count > 0)
+            {
+                curVer = list2[list2.Count - 1];
+            }
+            else
+            {
+                curVer = BaseVerTxt.Text;
+            }
+            WritePrivateProfileString("init_value", "current_base", curVer, "./pkgconf.ini");
+            WritePrivateProfileString("resource_list1", null, null, "./pkgconf.ini");
+            for (int i = 1; ; ++i)
+            {
+                if (i > list1.Count)
+                    break;
+                WritePrivateProfileString("resource_list1", "base" + i, list1[i - 1], "./pkgconf.ini");
+            }
+
+            RefreshUIData();
         }
 
         #region hash tool functions

@@ -65,5 +65,10 @@ namespace PackageTool
         {
             FileChecker();
         }
+
+        private void switchModeBtn_Click(object sender, EventArgs e)
+        {
+            SwitchMode();
+        }
     }
 }

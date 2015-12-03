@@ -47,6 +47,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.scriptCheckBox = new System.Windows.Forms.CheckBox();
             this.fileCheckerBtn = new System.Windows.Forms.Button();
+            this.switchModeBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OriginalBaseVerLabel
@@ -232,11 +233,22 @@
             this.fileCheckerBtn.UseVisualStyleBackColor = true;
             this.fileCheckerBtn.Click += new System.EventHandler(this.fileCheckerBtn_Click);
             // 
+            // switchModeBtn
+            // 
+            this.switchModeBtn.Location = new System.Drawing.Point(233, 328);
+            this.switchModeBtn.Name = "switchModeBtn";
+            this.switchModeBtn.Size = new System.Drawing.Size(75, 23);
+            this.switchModeBtn.TabIndex = 19;
+            this.switchModeBtn.Text = "切换模式";
+            this.switchModeBtn.UseVisualStyleBackColor = true;
+            this.switchModeBtn.Click += new System.EventHandler(this.switchModeBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 391);
+            this.Controls.Add(this.switchModeBtn);
             this.Controls.Add(this.fileCheckerBtn);
             this.Controls.Add(this.scriptCheckBox);
             this.Controls.Add(this.button2);
@@ -310,6 +322,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox scriptCheckBox;
         private System.Windows.Forms.Button fileCheckerBtn;
+        private System.Windows.Forms.Button switchModeBtn;
+        private int packMode;
     }
 }
 
