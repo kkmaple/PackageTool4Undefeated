@@ -48,6 +48,7 @@
             this.scriptCheckBox = new System.Windows.Forms.CheckBox();
             this.fileCheckerBtn = new System.Windows.Forms.Button();
             this.switchModeBtn = new System.Windows.Forms.Button();
+            this.checkSvnUpdate = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // OriginalBaseVerLabel
@@ -243,11 +244,22 @@
             this.switchModeBtn.UseVisualStyleBackColor = true;
             this.switchModeBtn.Click += new System.EventHandler(this.switchModeBtn_Click);
             // 
+            // checkSvnUpdate
+            // 
+            this.checkSvnUpdate.AutoSize = true;
+            this.checkSvnUpdate.Location = new System.Drawing.Point(67, 176);
+            this.checkSvnUpdate.Name = "checkSvnUpdate";
+            this.checkSvnUpdate.Size = new System.Drawing.Size(90, 16);
+            this.checkSvnUpdate.TabIndex = 20;
+            this.checkSvnUpdate.Text = "是否更新SVN";
+            this.checkSvnUpdate.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 391);
+            this.Controls.Add(this.checkSvnUpdate);
             this.Controls.Add(this.switchModeBtn);
             this.Controls.Add(this.fileCheckerBtn);
             this.Controls.Add(this.scriptCheckBox);
@@ -324,6 +336,7 @@
         private System.Windows.Forms.Button fileCheckerBtn;
         private System.Windows.Forms.Button switchModeBtn;
         private int packMode;
+        private System.Windows.Forms.CheckBox checkSvnUpdate;
     }
 }
 

@@ -168,14 +168,18 @@ namespace PackageTool
         /// <returns>是否成功</returns>
         private bool DoPack(bool showEnd = true)
         {
+            //Svn 更新Media目录
+            if (checkSvnUpdate.Checked)
+            {
+                SVN.Update(scriptPath);
+                SVN.Update(resPath);
+                UpdateLocalizationFile();
+                CopyLocallizationFile();
+            }
             if (scriptCheckBox.Checked && scriptPath != "")
             {
                 FileSystem.CopyDirectory(scriptPath, Path.Combine(resPath, Path.GetFileName(scriptPath)), true);
             }
-            //Svn 更新Media目录
-            //SVN.Update(resPath);
-            UpdateLocalizationFile();
-            CopyLocallizationFile();
             Command cmd = new Command();
             //删除之前的zip和zs5文件
             cmd.RunCmd(@"del /f /q *.zip *.zs5");
@@ -222,8 +226,11 @@ namespace PackageTool
             //修改xml文件
             if (showEnd)
                 ModifyChangeXml();
-            if(showEnd)
+            if (showEnd)
+            {
                 MessageBox.Show(curPath.Split('\\')[curPath.Split('\\').Length - 1] + " 更新包已打出！");
+                Application.Exit();
+            }
 
             return true;
         }
@@ -362,6 +369,17 @@ namespace PackageTool
         private void DoBigPatch()
         { 
 #if !TEST
+            if (checkSvnUpdate.Checked)
+            {
+                SVN.Update(scriptPath);
+                SVN.Update(resPath);
+                UpdateLocalizationFile();
+                CopyLocallizationFile();
+            }
+            if (scriptCheckBox.Checked && scriptPath != "")
+            {
+                FileSystem.CopyDirectory(scriptPath, Path.Combine(resPath, Path.GetFileName(scriptPath)), true);
+            }
             Command cmd = new Command();
             cmd.RunCmd("generateBigPatch.py");
             MessageBox.Show(" 大包已打！");
@@ -381,14 +399,14 @@ namespace PackageTool
             StringBuilder temp = new StringBuilder(255);
             XmlDocument doc = new XmlDocument();
             GetPrivateProfileString("version", "ver", "", temp, 255, "./bigPatch.ini");
-            doc.Load(BasePathTxt.Text + "/version.xml");
-            var a = doc.SelectSingleNode("versionCfg/Property[@name='" + "version" + @"']").Attributes["value"].InnerXml = temp.ToString();
-            doc.Save(BasePathTxt.Text + "/version.xml");
+            doc.Load(BasePathTxt.Text + "/res.xml");
+            var a = doc.SelectSingleNode("config/conf[@newest='" + curVer + @"']").Attributes["newest"].InnerXml = temp.ToString();
+            doc.Save(BasePathTxt.Text + "/res.xml");
             if (File.Exists(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak"))
                 File.Delete(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             Command cmd = new Command();
             cmd.RunCmd(@"解压拷贝.bat");
-            cmd.RunCmd(svnpath + @"/Tools/ZLibTool.exe");
+            cmd.RunCmd(svnpath + @"/Tools/PakTool/ZLibTool.exe");
             File.Move(curPath + "/Paks/Media.pak", BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             String msdstringsass = MD5File(BasePathTxt.Text + "/Media_" + temp.ToString() + ".pak");
             FileStream fs = File.OpenWrite(BasePathTxt.Text + "/Media_" + temp.ToString() + ".zs5");
@@ -396,6 +414,13 @@ namespace PackageTool
             fs.Write(data, 0, data.Length);
             fs.Flush();
             fs.Close();
+            if (File.Exists(resmd5txtFolder + "/" + curVer + ".txt"))
+            {
+                if (File.Exists(resmd5txtFolder + "/" + curVer + ".txt"))
+                    File.Delete(resmd5txtFolder + "/" + BaseVerTxt.Text + ".txt");
+                File.Move(resmd5txtFolder + "/" + curVer + ".txt", resmd5txtFolder + "/" + BaseVerTxt.Text + ".txt");
+                File.Copy(resmd5txtFolder + "/" + BaseVerTxt.Text + ".txt", BasePathTxt.Text + "/" + BaseVerTxt.Text + ".txt", true);
+            }
             MessageBox.Show(" 大包已重打！");
             Application.Exit();
 #endif
