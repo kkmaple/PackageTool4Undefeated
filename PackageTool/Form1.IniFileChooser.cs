@@ -257,10 +257,9 @@ namespace PackageTool
         /// </summary>
         private void ModifyChangeXml()
         {
-            return;
             XmlDocument doc = new XmlDocument();
             doc.Load(changePath);
-            var a = doc.SelectSingleNode("versionCfg/conf[@os='"+ changeOs + @"']").Attributes["version"].InnerXml = curVer;
+            var a = doc.SelectSingleNode("config/global/conf[@os='"+ changeOs + @"']").Attributes["resVer"].InnerXml = curVer;
             doc.Save(changePath);
         }
 
