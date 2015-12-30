@@ -425,12 +425,18 @@ namespace PackageTool
 #endif
         }
 
+        /// <summary>
+        /// 检查重复文件
+        /// </summary>
         private void FileChecker()
         {
             Command cmd = new Command();
             cmd.RunCmd("file_checker.py");
         }
 
+        /// <summary>
+        /// 切换模式 强更更新包与普通更新包
+        /// </summary>
         private void SwitchMode()
         {
             if (1 == packMode)

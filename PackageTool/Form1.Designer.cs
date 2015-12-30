@@ -302,7 +302,9 @@
         private System.Windows.Forms.Button BasePathBrowserBtn;
         //md5文件目录
         private string resmd5txtFolder;
+        //添加新版本按钮
         private System.Windows.Forms.Button NewVerBtn;
+        //go按钮
         private System.Windows.Forms.Button GoGoGo;
         //程序当前路劲
         private string curPath;
@@ -322,20 +324,29 @@
         private string resPath;
         //res script path
         private string scriptPath;
+        //比较按钮
         private System.Windows.Forms.Button compareBtn;
         //svn path
         private string svnpath;
         //ini文件名
         private string iniFileName;
+        //同步按钮
         private System.Windows.Forms.Button testSynBtn;
+        //版本号第三位长度
         private int verLen;
+        //自动比较选择框
         private System.Windows.Forms.CheckBox autoCompareCheckBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        //是否拷贝脚本按钮
         private System.Windows.Forms.CheckBox scriptCheckBox;
+        //检查重复文件选择框
         private System.Windows.Forms.Button fileCheckerBtn;
+        //切换模式按钮
         private System.Windows.Forms.Button switchModeBtn;
+        //打包模式
         private int packMode;
+        //是否更新SVN选择框
         private System.Windows.Forms.CheckBox checkSvnUpdate;
     }
 }
