@@ -21,6 +21,8 @@ namespace PackageTool
         {
             proc = new Process();
         }
+
+        public int? Pid { get { try { return proc.HasExited ? 0 : proc.Id; } catch { return 0; } } }
         /// <summary> 
         /// 执行CMD语句 
         /// </summary> 
@@ -79,6 +81,60 @@ namespace PackageTool
                     sOut.Close();
                 if (pro != null)
                     pro.Close();
+            }
+        }
+
+        /// <summary>
+        /// 执行一条command命令
+        /// </summary>
+        /// <param name="command">需要执行的Command</param>
+        /// <param name="output">输出</param>
+        /// <param name="error">错误</param>
+        public static void ExecuteCommand(string command, out string output, out string error)
+        {
+            try
+            {
+                //创建一个进程
+                Process pc = new Process();
+                pc.StartInfo.FileName = command;
+                pc.StartInfo.UseShellExecute = false;
+                pc.StartInfo.RedirectStandardOutput = true;
+                pc.StartInfo.RedirectStandardError = true;
+                pc.StartInfo.CreateNoWindow = true;
+
+                //启动进程
+                pc.Start();
+
+                //准备读出输出流和错误流
+                string outputData = string.Empty;
+                string errorData = string.Empty;
+                pc.BeginOutputReadLine();
+                pc.BeginErrorReadLine();
+
+                pc.OutputDataReceived += (ss, ee) =>
+                {
+                    outputData += ee.Data;
+                };
+
+                pc.ErrorDataReceived += (ss, ee) =>
+                {
+                    errorData += ee.Data;
+                };
+
+                //等待退出
+                pc.WaitForExit();
+
+                //关闭进程
+                pc.Close();
+
+                //返回流结果
+                output = outputData;
+                error = errorData;
+            }
+            catch (Exception)
+            {
+                output = null;
+                error = null;
             }
         }
     }
